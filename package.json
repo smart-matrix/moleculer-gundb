@@ -2,7 +2,7 @@
   "name": "@smart-matrix/moleculer-gundb",
   "version": "0.0.2",
   "description": "GunDB mixins for Moleculer DB service.",
-  "main": "lib/index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon examples/index.js",
     "ci": "jest --watch",
