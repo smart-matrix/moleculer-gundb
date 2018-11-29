@@ -1,6 +1,6 @@
 {
   "name": "@smart-matrix/moleculer-gundb",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "GunDB mixins for Moleculer DB service.",
   "main": "index.js",
   "scripts": {
@@ -9,11 +9,10 @@
     "test": "jest --coverage",
     "lint": "eslint --ext=.js src test",
     "deps": "npm-check -u",
-    "deploy": "npm run version && npm run src-lib && npm run deploy:lib",
+    "deploy": "npm version patch && npm run src-lib && npm run deploy:lib",
     "deploy:lib": "npm publish ./ --access public",
     "coverall": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "src-lib": "ncp ./src ./lib",
-    "version": "npm version patch"
+    "src-lib": "ncp ./src ./lib"
   },
   "keywords": [
     "moleculer",
