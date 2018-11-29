@@ -1,7 +1,9 @@
 "use strict";
 
 let { ServiceBroker } 	= require("moleculer");
-let MyService 			= require("../../index");
+let ApiGateway = require("moleculer-web");
+let GunDBService		= require("../../index");
+let Gun 				= require('gun/gun');
 
 // Create broker
 let broker = new ServiceBroker({
@@ -9,15 +11,29 @@ let broker = new ServiceBroker({
 });
 
 // Load my service
-broker.createService(MyService);
+broker.createService({
+	name: 'gun.test',
+	mixins: [ApiGateway, GunDBService],
+	settings: {
+		port: 3001
+	}
+});
 
 // Start server
 broker.start().then(() => {
+	var gun = new Gun('http://localhost:3001/');
 
-	// Call action
-	broker
-		.call("gun.test", { name: "John Doe" })
-		.then(broker.logger.info)
-		.catch(broker.logger.error);
+	gun.get('hello').once(function(data, key) {
+		console.log(data.name);
+	});
 
+	gun.get('hello').put({ name: 'World_New' });
+
+	setTimeout(() => {
+		gun.get('hello').put({ name: 'World_New2' });
+	}, 1000);
+
+	gun.get('hello').on(function(data, key) {
+		console.log(data.name);
+	});
 });
