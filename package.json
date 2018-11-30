@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "build:dev": "tsc -w",
     "dev": "npm run build && nodemon examples/index.js",
+    "devc": "npm run build:dev | nodemon examples/index.js",
     "ci": "jest --watch --coverage",
     "test": "jest --coverage",
     "lint": "eslint --ext=.js src test",
@@ -25,7 +27,8 @@
   "author": "Fathym, Inc",
   "license": "MIT",
   "peerDependencies": {
-    "moleculer": "^0.13.0"
+    "moleculer": "^0.13.0",
+    "gun": "^0.9.9992"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
@@ -56,5 +59,8 @@
   },
   "engines": {
     "node": ">= 8.x.x"
+  },
+  "dependencies": {
+    "gun": "^0.9.9992"
   }
 }

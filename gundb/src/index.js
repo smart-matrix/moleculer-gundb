@@ -1,21 +1,36 @@
-import { ServiceSchema } from "moleculer";
-import Gun from 'gun';
+/*
+ * gundb
+ * Copyright (c) 2018 Fathym, Inc (https://github.com/smart-matrix/gundb)
+ * MIT Licensed
+ */
 
-const GunDBService: ServiceSchema = {
+"use strict";
+
+const Gun = require('gun');
+
+module.exports = {
+
 	name: "gundb",
 
-	mixins: [],
-
+	/**
+	 * Default settings
+	 */
 	settings: {
 		port: process.env.PORT || 3000,
 	},
-	
+
+	/**
+	 * Actions
+	 */
 	actions: {
 		test(ctx) {
-			return "Hello there " + (ctx.params.name || "Anonymous");
+			return "Hello " + (ctx.params.name || "Anonymous");
 		}
 	},
-	
+
+	/**
+	 * Methods
+	 */
 	methods: {
 		initGateway() {
 			var http = require('http');
@@ -41,22 +56,29 @@ const GunDBService: ServiceSchema = {
 			server.listen(port, function () {
 				console.log('\nApp listening on port', port);
 			});
+
 		},
 	},
 
+	/**
+	 * Service created lifecycle event handler
+	 */
 	created() {
 		if (!this.gun) {
 			this.initGateway();
 		}
 	},
 
+	/**
+	 * Service started lifecycle event handler
+	 */
 	started() {
-
 	},
 
+	/**
+	 * Service stopped lifecycle event handler
+	 */
 	stopped() {
 
 	}
 };
-
-export = GunDBService;
