@@ -17,15 +17,15 @@
 	<p>Open your web console</p>
 
 	<!-- Loads gun -->
-	<script src='http://localhost:3000/gun/gun.js'></script>
-    <script src='http://localhost:3000/gun/lib/path.js'></script>
+	<script src='/gun/gun.js'></script>
+    <script src='/gun/lib/path.js'></script>
     
 	<script>
 	(function () {
 
 		// Sync this gun instance with the server.
 		var gun = Gun([
-			'http://localhost:8080/gun',
+			`http://localhost:${location.port}/gun`,
 		]);
 
 		// Reads key 'data'.
@@ -39,9 +39,13 @@
 		// Writes a value to the key 'data'.
 		data.put({ message: 'Hello world!' });
 
+		var count = 0;
+
 		// Listen for real-time change events.
 		data.path('message').on(function (message) {
-			console.log('Message:', message);
+			count++;
+
+			console.log(`Message(${count}):`, message);
 		});
 
 	}())

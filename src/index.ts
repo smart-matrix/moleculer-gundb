@@ -1,5 +1,7 @@
 import { ServiceSchema } from "moleculer";
 import Gun from 'gun';
+import { Server } from 'http';
+import fs from 'fs';
 
 const GunDBService: ServiceSchema = {
 	name: "gundb",
@@ -8,50 +10,68 @@ const GunDBService: ServiceSchema = {
 
 	settings: {
 		port: process.env.PORT || 3000,
+		server: undefined
 	},
-	
+
 	actions: {
-		test(ctx) {
-			return "Hello there " + (ctx.params.name || "Anonymous");
-		}
 	},
-	
+
 	methods: {
-		initGateway() {
-			var http = require('http');
-			var port = this.settings.port;
-			var fs = require('fs');
+		serveGun() {
+			return Gun.serve;
+		},
 
-			// Listens on /gun.js route.
-			var server = http.Server();
+		buildSimpleServer(port) {
+			var server = new Server();
 
-			// Serves up /index.html
-			server.on('request', function (req, res) {
-				if(Gun.serve(req, res)){ return }
-				if (req.url === '/' || req.url === '/index.html') {
-					fs.createReadStream('examples/index.html').pipe(res);
-				}
-			});
+			server.on('request', (req, res) => {
+				if (this.serveGun()(req, res))
+					return;
 
-			var gun = Gun({
-				file: 'data.json',
-				web: server // Handles real-time requests and updates.
+				if (req.url === '/' || req.url === '/index.html')
+					fs.createReadStream('lib/examples/index.html').pipe(res);
 			});
 
 			server.listen(port, function () {
 				console.log('\nApp listening on port', port);
+			});
+
+			return server;
+		},
+
+		initGateway() {
+			var port = this.settings.port;
+
+			if (this.settings.server) {
+				this.logger.info('Using configured server from settings.');
+
+				this.server = this.settings.server;
+			} else if (this.server) {
+				this.logger.info('Using server from local fields.');
+
+				this.server = this.server;
+			} else {
+				this.logger.info(`Building dev server with port: ${port}`);
+
+				this.server = this.buildSimpleServer(port);
+			}
+
+			this.gun = Gun({
+				file: 'data.json',
+				web: this.server
 			});
 		},
 	},
 
 	created() {
 		if (!this.gun) {
+			this.logger.info(`Initializing the gun gateway.`);
+
 			this.initGateway();
 		}
 	},
 
 	started() {
-
 	},
 
 	stopped() {
