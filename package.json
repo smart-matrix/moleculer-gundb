@@ -6,8 +6,10 @@
   "scripts": {
     "build": "tsc",
     "build:dev": "tsc -w",
-    "dev": "npm run build && nodemon lib/examples/index.js",
-    "devc": "npm run build:dev | nodemon lib/examples/index.js",
+    "dev": "npm run build && npm run dev:node",
+    "devc": "npm run build:dev | npm run dev:mon",
+    "dev:node": "node lib/examples/index.js",
+    "dev:mon": "nodemon lib/examples/index.js",
     "ci": "jest --watch --coverage",
     "test": "jest --coverage",
     "lint": "eslint --ext=.js src test",
@@ -28,7 +30,7 @@
   "license": "MIT",
   "peerDependencies": {
     "moleculer": "^0.13.0",
-    "gun": "^0.9.9992"
+    "gun": "^0.9.99999"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
@@ -59,8 +61,5 @@
   },
   "engines": {
     "node": ">= 8.x.x"
-  },
-  "dependencies": {
-    "gun": "^0.9.9992"
   }
 }

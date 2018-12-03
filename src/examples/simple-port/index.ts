@@ -5,6 +5,15 @@ let broker = new ServiceBroker({
 	logger: console
 });
 
-broker.createService(GunDBService);
+broker.createService({
+	name: 'gundb.port.test',
+
+	mixins: [GunDBService],
+
+	settings: {
+		exampleFile: 'lib/examples/index.html',
+		useSocketGateway: false
+	}
+});
 
 broker.start();

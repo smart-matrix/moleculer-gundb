@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
 	<meta charset='UTF-8'>
 	<title>GunDB Application</title>
@@ -11,6 +12,7 @@
 		}
 	</style>
 </head>
+
 <body>
 
 	<h1>Hello world gun app</h1>
@@ -18,37 +20,40 @@
 
 	<!-- Loads gun -->
 	<script src='/gun/gun.js'></script>
-    <script src='/gun/lib/path.js'></script>
-    
+	<script src='/gun/lib/path.js'></script>
+
 	<script>
-	(function () {
+		(function () {
 
-		// Sync this gun instance with the server.
-		var gun = Gun([
-			`http://localhost:${location.port}/gun`,
-		]);
+			// Sync this gun instance with the server.
+			var gun = Gun([
+				`http://localhost:${location.port}/gun`,
+			]);
 
-		// Reads key 'data'.
-		var data = gun.get('data');
+			// Reads key 'data'.
+			var data = gun.get('data');
 
-		// Exposed so the JS console can see it.
-		window.data = data;
+			// Exposed so the JS console can see it.
+			window.data = data;
 
-		console.log('Gun reference exposed as %cwindow.data', 'color: red');
+			console.log('Gun reference exposed as %cwindow.data', 'color: red');
 
-		// Writes a value to the key 'data'.
-		data.put({ message: 'Hello world!' });
+			var count = 0;
 
-		var count = 0;
+			setInterval(() => {
+				count++;
 
-		// Listen for real-time change events.
-		data.path('message').on(function (message) {
-			count++;
+				// Writes a value to the key 'data'.
+				data.put({ message: `Hello world: (${count})` });
+			}, 5000);
 
-			console.log(`Message(${count}):`, message);
-		});
+			// Listen for real-time change events.
+			data.path('message').on(function (message) {
+				console.log(`Message(${count}):`, message);
+			});
 
-	}())
+		}())
 	</script>
 </body>
+
 </html>
