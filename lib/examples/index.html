@@ -19,15 +19,16 @@
 	<p>Open your web console</p>
 
 	<!-- Loads gun -->
-	<script src='/gun/gun.js'></script>
-	<script src='/gun/lib/path.js'></script>
-
+	<!-- <script src='/gun/gun.js'></script> -->
+	<!-- <script src='/gun/lib/path.js'></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/gun/lib/path.js"></script>
 	<script>
 		(function () {
 
 			// Sync this gun instance with the server.
 			var gun = Gun([
-				`http://localhost:${location.port}/gun`,
+				`http://localhost:5280/gun`,
 			]);
 
 			// Reads key 'data'.
